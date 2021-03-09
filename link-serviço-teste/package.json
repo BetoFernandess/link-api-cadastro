@@ -1,0 +1,16 @@
+{
+  "name": "link-servico-teste",
+  "version": "1.0.0",
+  "description": "Um servidor de testes para o aplicativo Link paseado em Axios",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "leite": "^0.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test.js"
+  },
+  "author": "Link Informática",
+  "license": "ISC"
+}
