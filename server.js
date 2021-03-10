@@ -11,18 +11,11 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
-<<<<<<< HEAD
-app.use(express.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
-=======
+
 app.use(bodyParser.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
-
 
 
 
@@ -38,10 +31,10 @@ db.mongoose
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log("Connected to the database!");
+    console.log("Conectado ao banco de dados!");
   })
   .catch(err => {
-    console.log("Cannot connect to the database!", err);
+    console.log("Nao foi possível conectar ao banco de dados!", err);
     process.exit();
   });
 
@@ -52,7 +45,7 @@ db.mongoose
 require("./app/routes/routes")(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 7070;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  console.log(`Servidor funcionando na porta ${PORT}.`);
 });

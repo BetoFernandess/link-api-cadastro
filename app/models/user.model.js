@@ -12,13 +12,10 @@ module.exports = mongoose => {
 
     login: String,
     pass: String,
-<<<<<<< HEAD
+
     active: Boolean,
 
     type:String
-=======
-    active: Boolean
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
 
   },
     {

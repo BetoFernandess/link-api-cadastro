@@ -28,12 +28,10 @@ exports.register = (req, res) => {
     email: req.body.email,
     login: req.body.login,
     pass: hash,
-<<<<<<< HEAD
+
     active: req.body.active ? req.body.active : true,
     type:"usuário"
-=======
-    active: req.body.active ? req.body.active : true
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
+
   });
 
   user
@@ -57,24 +55,18 @@ exports.listUsers = (req, res) => {
 
   Login.findOne(user_login).then(data => {
     if (!data) {
-<<<<<<< HEAD
       res.status(400).send({ message: "Usuário deve se logar ou registrar primeiro" });
-=======
-      res.status(400).send({ message: "Usuário não logado" });
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
+
       return
     }
 
 
-<<<<<<< HEAD
    
 
     var condition =  { type: { $regex: new RegExp("usuário"), $options: "i" } } ;
-=======
+
     const name = req.query.name;
 
-    var condition = name ? { name: { $regex: new RegExp(name), $options: "i" } } : {};
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
 
     User.find(condition)
       .then(data => {
@@ -89,15 +81,10 @@ exports.listUsers = (req, res) => {
 
 
   }).catch(err => {
-<<<<<<< HEAD
     
     res.status(500).send({
       message: "Erro ao encontrar o login do usuário de ID" + auth_id + ": " + err
-=======
-    const erro = User.findOne(user_login).exec() == undefined ? "usuário não existe" : "usuário não logou";
-    res.status(500).send({
-      message: "Erro ao encontrar o login do usuário de ID" + auth_id + ": " + erro
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
+
     });
   });
 };
@@ -112,11 +99,7 @@ exports.update = (req, res) => {
   Login.findOne(user_login).then(data => {
 
     if (!data) {
-<<<<<<< HEAD
       res.status(400).send({ message: "Usuário deve se logar ou registrar primeiro" });
-=======
-      res.status(400).send({ message: "Usuário não logado" });
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
       return
     }
 
@@ -129,15 +112,12 @@ exports.update = (req, res) => {
 
     const id = req.params.uuid;
 
-<<<<<<< HEAD
+
     if (!uuid) {
       res.status(400).send({ message: "Não foi informado o id do usuário" });
       return
     }
 
-
-=======
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
     User.findOneAndUpdate(id, req.body, { useFindAndModify: false })
       .then(data => {
         if (!data) {
@@ -169,11 +149,7 @@ exports.delete = (req, res) => {
 
   Login.findOne(user_login).then(data => {
     if (!data) {
-<<<<<<< HEAD
       res.status(400).send({ message: "Usuário deve se logar ou registrar primeiro" });
-=======
-      res.status(400).send({ message: "Usuário não logado" });
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
       return
     }
 
@@ -181,7 +157,7 @@ exports.delete = (req, res) => {
 
     const id = req.params.uuid;
 
-<<<<<<< HEAD
+
 
     if (!uuid) {
       res.status(400).send({ message: "Não foi informado o id do usuário" });
@@ -189,17 +165,11 @@ exports.delete = (req, res) => {
     }
 
 
-=======
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
     User.findOneAndRemove(id)
       .then(data => {
         if (!data) {
           res.status(404).send({
-<<<<<<< HEAD
             message: `Não é possível remover o usuário de ID ${id} porque o usuário não existe.`
-=======
-            message: `Não é possível remover do ID ${id} porque o usuário não existe.`
->>>>>>> e028a2a73736f87d3d9e932f8d55522927ccbc15
           });
         } else {
           res.send({
@@ -220,3 +190,124 @@ exports.delete = (req, res) => {
   });
 };
 
+
+exports.createContact = (req, res) => {
+  const auth_id = req.params.auth_id;
+  const body = req.body
+
+
+  var user_login = auth_id ? { auth_uuid: { $regex: new RegExp(auth_id), $options: "i" } } : {};
+
+  Login.findOne(user_login).then(data => {
+
+    if (!data) {
+
+      res.status(400).send({ message: "Usuário deve se logar ou registrar primeiro" });
+      res.status(400).send({ message: "Usuário não logado" });
+
+      return
+    }
+
+
+    if (!body.name) {
+      res.status(400).send({ message: "Conteúdo não pode ser vazio!!" });
+      return
+    }
+
+
+
+
+    const user = new User({
+      uuid: new mongoose.Types.ObjectId(),
+      user_id: body.user_id ? new mongoose.Types.ObjectId(body.user_id) : undefined,
+      name: body.name,
+      birthdate: body.birthdate,
+      phone: body.phone,
+      cep: body.cep,
+      info: body.info,
+      email: body.email,
+
+      active: body.active ? body.active : false,
+      type:"contato"
+    });
+
+    user
+      .save(user)
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Ocorreu um erro ao criar o usuário" + body.name
+        });
+      });
+  }).catch(err => {
+    res.status(500).send({
+      message: "Erro ao encontrar o login do usuário de ID" + auth_id + "\n" + err
+    });
+  });
+};
+
+
+exports.listContacts = (req, res) => {
+  const auth_id = req.params.auth_id;
+
+  var user_login = auth_id ? { auth_uuid: { $regex: new RegExp(auth_id), $options: "i" } } : {};
+
+
+
+  Login.findOne(user_login).then(data => {
+
+    console.log(data)
+    if (!data) {
+
+      res.status(400).send({ message: "Usuário deve se logar ou registrar primeiro" });
+      res.status(400).send({ message: "Usuário não logado" });
+
+      return
+    }
+
+    const user_id = req.params.user_id;
+
+
+    if (!user_id) {
+      res.status(400).send({ message: "Não foi informado o id do usuário" });
+      return
+    }
+
+    var condition =  { user_id: user_id, type:"contato" };
+
+    User.find(condition)
+      .then(data => {
+        
+        if(data)
+          res.send(data);
+        else
+          res.status(204).send(
+            {
+              message:"Não há contatos para o usuário dado"
+            }
+          )
+
+
+    var condition = user_id ? { user_id: user_id } : { user_id: undefined };
+
+    User.find(condition)
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Ocorreu um erro ao listar os usuários subordinados"
+        });
+      });
+
+  }).catch(err => {
+    res.status(500).send({
+      message: "Erro ao encontrar o login do usuário de ID" + auth_id + "\n" + err
+    });
+  });
+  });
+};
